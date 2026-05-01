@@ -1,0 +1,84 @@
+name: new_balan_delivery
+description: New Balan Medical – Delivery Partner App
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+  flutter: '>=3.22.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Navigation
+  go_router: ^14.3.0
+
+  # State management
+  provider: ^6.1.2
+
+  # HTTP
+  http: ^1.2.1
+
+  # Secure storage (auth tokens — Android Keystore / iOS Keychain)
+  flutter_secure_storage: ^9.2.2
+
+  # Key-value store (preferences, installation ID)
+  shared_preferences: ^2.3.2
+
+  # Google Fonts (Inter + Outfit — matching the React Native app)
+  google_fonts: ^6.2.1
+
+  # Device platform detection
+  device_info_plus: ^10.1.2
+
+  # UUID for stable per-install ID
+  uuid: ^4.4.2
+
+  # ── Push notifications (Firebase / FCM) ──────────────────────────────
+  # Uncomment after adding google-services.json (Android) and
+  # GoogleService-Info.plist (iOS) to the platform directories.
+  #
+  # firebase_core: ^3.4.1
+  # firebase_messaging: ^15.1.1
+  # flutter_local_notifications: ^17.2.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+  # App icon generation — run: flutter pub run flutter_launcher_icons
+  flutter_launcher_icons: ^0.13.1
+
+  # Splash screen generation — run: dart run flutter_native_splash:create
+  flutter_native_splash: ^2.4.1
+
+# ── App icon config ────────────────────────────────────────────────────
+# Place your icon at assets/images/app_icon.png (1024×1024, no transparency)
+# then run: flutter pub run flutter_launcher_icons
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/app_icon.png"
+  adaptive_icon_background: "#0056B3"   # brand primary blue
+  adaptive_icon_foreground: "assets/images/app_icon_fg.png"
+  min_sdk_android: 21
+
+# ── Splash screen config ───────────────────────────────────────────────
+# Run: dart run flutter_native_splash:create
+flutter_native_splash:
+  color: "#0056B3"
+  image: assets/images/splash_logo.png
+  color_dark: "#004085"
+  image_dark: assets/images/splash_logo.png
+  android: true
+  ios: true
+  android_12:
+    icon_background_color: "#0056B3"
+    image: assets/images/splash_logo.png
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
