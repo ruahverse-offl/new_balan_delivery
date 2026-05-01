@@ -1,4 +1,5 @@
 import Constants from 'expo-constants';
+import { Platform } from 'react-native';
 
 type ApiExtra = { apiOrigin?: string; apiPrefix?: string };
 
@@ -18,7 +19,18 @@ function readApiOrigin(): string {
   return 'http://127.0.0.1:8000';
 }
 
-export const API_ORIGIN = readApiOrigin();
+const _resolvedOrigin = readApiOrigin();
+if (
+  Platform.OS !== 'web' &&
+  /^(https?:\/\/)?(127\.0\.0\.1|localhost)(:\d+)?\/?$/i.test(_resolvedOrigin.replace(/\/$/, ''))
+) {
+  console.warn(
+    '[API] Base URL points to this machine (127.0.0.1/localhost). Physical devices cannot reach it. ' +
+      'Set EXPO_PUBLIC_API_ORIGIN to your backend, e.g. http://192.168.1.10:8000, and rebuild the APK.',
+  );
+}
+
+export const API_ORIGIN = _resolvedOrigin;
 
 const prefixRaw = readExtra().apiPrefix ?? process.env.EXPO_PUBLIC_API_PREFIX ?? '/api/v1';
 const prefix = prefixRaw.startsWith('/') ? prefixRaw : `/${prefixRaw}`;

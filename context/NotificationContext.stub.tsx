@@ -4,7 +4,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 /** Same keys as impl — keeps prefs if user later installs a dev build. */
 const NOTIFICATIONS_ENABLED_KEY = 'dp_notifications_enabled';
-const NOTIFICATIONS_PROMPTED_KEY = 'dp_notifications_prompted_once';
 
 type NotificationContextValue = {
   loading: boolean;
@@ -52,10 +51,12 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
       await AsyncStorage.setItem(NOTIFICATIONS_ENABLED_KEY, '0');
       return;
     }
-    await AsyncStorage.setItem(NOTIFICATIONS_PROMPTED_KEY, '1');
-    await AsyncStorage.setItem(NOTIFICATIONS_ENABLED_KEY, '1');
-    setEnabledState(true);
-    Alert.alert('Development build required', EXPO_GO_ANDROID_PUSH_MSG);
+    /** Do not persist "on": Expo Go cannot obtain a push token — use a dev APK on the emulator. */
+    Alert.alert(
+      'Development build required',
+      `${EXPO_GO_ANDROID_PUSH_MSG}\n\nFrom project folder: npm run android\n(or install an EAS internal APK on this emulator).`,
+      [{ text: 'OK' }],
+    );
   }, []);
 
   const value = useMemo(

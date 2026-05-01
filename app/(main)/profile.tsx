@@ -28,8 +28,6 @@ export default function DeliveryProfileScreen() {
   const {
     loading: notifLoading,
     enabled: notifEnabled,
-    permissionGranted: notifPermission,
-    expoPushToken,
     setEnabled: setNotifEnabled,
   } = useNotifications();
   const [notifSaving, setNotifSaving] = useState(false);
@@ -156,11 +154,8 @@ export default function DeliveryProfileScreen() {
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
             <View style={{ flex: 1 }}>
               <Text style={[profileStyles.cardTitle, { marginBottom: 2 }]}>Push notifications</Text>
-              <Text style={profileStyles.hint}>
-                Get alerts for new assignments and order updates.
-              </Text>
               <Text style={[profileStyles.hint, { marginBottom: 0 }]}>
-                {notifLoading ? 'Loading…' : notifPermission ? 'Permission granted' : 'Permission not granted'}
+                Get alerts for new assignments and order updates.
               </Text>
             </View>
             <Switch
@@ -171,9 +166,6 @@ export default function DeliveryProfileScreen() {
               thumbColor={Theme.white}
             />
           </View>
-          <Text style={[profileStyles.hint, { marginTop: 10, marginBottom: 0 }]}>
-            Expo push token: {expoPushToken || 'Not available (set EAS_PROJECT_ID for builds)'}
-          </Text>
         </View>
 
         <View style={profileStyles.card}>

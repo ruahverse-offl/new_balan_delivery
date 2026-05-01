@@ -40,7 +40,7 @@ export default function DeliveryLoginScreen() {
     setBusy(true);
     try {
       if (!email.trim()) {
-        Alert.alert('Validation', 'Email is required.');
+        Alert.alert('Validation', 'Username is required.');
         return;
       }
       if (password.length < 1) {
@@ -72,20 +72,24 @@ export default function DeliveryLoginScreen() {
           <View style={styles.card}>
             <TextInput
               style={styles.input}
-              placeholder="Email"
+              placeholder="Username"
+              placeholderTextColor={Theme.gray500}
               value={email}
               onChangeText={setEmail}
               autoCapitalize="none"
               keyboardType="email-address"
+              autoComplete="username"
             />
             <View style={styles.passwordRow}>
               <TextInput
                 style={styles.passwordInput}
                 placeholder="Password"
+                placeholderTextColor={Theme.gray500}
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry={!showPassword}
                 autoCapitalize="none"
+                autoComplete="password"
               />
               <Pressable
                 style={styles.passwordToggle}

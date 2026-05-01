@@ -84,6 +84,11 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
       await AsyncStorage.removeItem(LAST_EXPO_PUSH_TOKEN_KEY);
       return;
     }
+    /** ``POST /me/notification-settings`` requires JWT — do not fetch/persist Expo token before sign-in. */
+    if (!authToken) {
+      setExpoPushToken(null);
+      return;
+    }
     try {
       await ensureAndroidNotificationChannel();
       const tokenStr = await fetchExpoPushTokenSafe();
@@ -115,22 +120,16 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
   const loadState = useCallback(async () => {
     setLoading(true);
     try {
-      const [storedPref, promptedOnce, permissions] = await Promise.all([
+      const [storedPref, permissions] = await Promise.all([
         AsyncStorage.getItem(NOTIFICATIONS_ENABLED_KEY),
-        AsyncStorage.getItem(NOTIFICATIONS_PROMPTED_KEY),
         Notifications.getPermissionsAsync(),
       ]);
-      let granted =
+      // Do not call requestPermissionsAsync here — avoid the system dialog before sign-in.
+      // Users opt in from Profile (toggle) after login.
+      await ensureAndroidNotificationChannel();
+      const granted =
         permissions.granted ||
         permissions.ios?.status === Notifications.IosAuthorizationStatus.PROVISIONAL;
-      if (!granted && promptedOnce !== '1') {
-        await ensureAndroidNotificationChannel();
-        const requested = await Notifications.requestPermissionsAsync();
-        granted =
-          requested.granted ||
-          requested.ios?.status === Notifications.IosAuthorizationStatus.PROVISIONAL;
-        await AsyncStorage.setItem(NOTIFICATIONS_PROMPTED_KEY, '1');
-      }
       const prefEnabled = storedPref !== '0';
       setPermissionGranted(granted);
       setEnabledState(prefEnabled && granted);
