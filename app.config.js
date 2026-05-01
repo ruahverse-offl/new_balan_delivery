@@ -19,8 +19,13 @@ if (!apiPrefix.startsWith('/')) {
   apiPrefix = `/${apiPrefix}`;
 }
 
-/** Set after `eas init` / `eas build:configure` for this app — optional for local `expo run:android`. */
-const easProjectId = process.env.EAS_PROJECT_ID || '';
+/**
+ * EAS / Expo push need a stable project id. Env wins so CI can override; otherwise use app.json `extra.eas.projectId`.
+ */
+const easProjectId =
+  process.env.EAS_PROJECT_ID ||
+  (appJson.expo.extra && appJson.expo.extra.eas && appJson.expo.extra.eas.projectId) ||
+  '';
 
 module.exports = {
   expo: {
