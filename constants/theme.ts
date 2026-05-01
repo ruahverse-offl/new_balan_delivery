@@ -1,0 +1,53 @@
+/** Same palette as customer app `new_balan_apk` / web `new_balan_fe`. */
+export const Theme = {
+  primary: '#0056b3',
+  primaryDark: '#004085',
+  primaryLight: '#e7f3ff',
+  secondary: '#28a745',
+  secondaryDark: '#1e7e34',
+  secondaryLight: '#e8f5e9',
+  accent: '#5bc0de',
+  accentBlue: '#1d4ed8',
+  white: '#ffffff',
+  gray50: '#f9fafb',
+  gray100: '#f3f4f6',
+  gray200: '#e5e7eb',
+  gray300: '#d1d5db',
+  gray400: '#9ca3af',
+  gray500: '#6b7280',
+  gray600: '#4b5563',
+  gray700: '#374151',
+  gray800: '#1f2937',
+  gray900: '#111827',
+  shadow: 'rgba(0, 0, 0, 0.1)',
+  shadowSm: 'rgba(0, 0, 0, 0.05)',
+  shadowMd: 'rgba(0, 0, 0, 0.1)',
+  shadowLg: 'rgba(0, 0, 0, 0.15)',
+  gradientHero: ['#0f172a', '#1d4ed8'] as const,
+  gradientHeroSoft: ['#1e3a8a', '#2563eb'] as const,
+  primaryGradient: ['#0056b3', '#003d82'] as const,
+  secondaryGradient: ['#28a745', '#1e7e34'] as const,
+  radiusSm: 6,
+  radiusMd: 8,
+  radius: 8,
+  radiusLg: 16,
+  radiusXl: 20,
+  radiusFull: 9999,
+  shadowCard: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 3,
+  },
+  focusRing: 'rgba(0, 86, 179, 0.45)',
+} as const;
+
+export const Fonts = {
+  body: 'Inter_400Regular',
+  bodySemi: 'Inter_600SemiBold',
+  heading: 'Outfit_700Bold',
+  display: 'Outfit_800ExtraBold',
+} as const;
+
+export type ThemeColors = typeof Theme;
