@@ -24,9 +24,10 @@ flutter pub get
 
 ## 3. Configure the API origin
 
-The default API host is `http://10.0.2.2:8000` (Android emulator → host machine).
+The project root `.env` uses the same `VITE_API_BASE_URL` and `VITE_API_PREFIX` as **new_balan_fe** (loaded via `flutter_dotenv`).  
+If `.env` is missing, the default API host is `http://10.0.2.2:8000` (Android emulator → host machine).
 
-Override at run-time with `--dart-define`:
+Override at build/run time with `--dart-define` (wins over `.env`):
 
 ```bash
 # Android emulator (default)
@@ -58,9 +59,11 @@ android {
 
 ---
 
-## 5. Push notifications (FCM) – optional
+## 5. Push notifications (FCM) – required
 
-Push notification support requires Firebase.
+Push notifications use Firebase Cloud Messaging. Firebase is already wired up in
+`main.dart`, `notification_provider.dart`, and `pubspec.yaml`. You only need to
+supply the platform config files and run `flutterfire configure`.
 
 ### Setup steps:
 1. Create a project at [Firebase Console](https://console.firebase.google.com)
@@ -68,23 +71,15 @@ Push notification support requires Firebase.
 3. Download `google-services.json` → place in `android/app/`
 4. Add an iOS app with bundle ID `com.newbalan.medical.delivery`
 5. Download `GoogleService-Info.plist` → place in `ios/Runner/`
-6. In `pubspec.yaml`, uncomment:
-   ```yaml
-   firebase_core: ^3.4.1
-   firebase_messaging: ^15.1.1
-   flutter_local_notifications: ^17.2.2
+6. Install the FlutterFire CLI and run:
+   ```bash
+   dart pub global activate flutterfire_cli
+   flutterfire configure --project=<your-firebase-project-id>
    ```
-7. In `lib/main.dart`, uncomment:
-   ```dart
-   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-   ```
-8. In `lib/providers/notification_provider.dart`, uncomment the
-   `FirebaseMessaging` code in `_requestAndRegister()`.
-
-**Note:** The backend currently uses Expo push tokens. When using Flutter + FCM,
-the FCM token is stored in the `expo_push_token` field. The backend's
-notification-sending logic will need to be updated to use the FCM HTTP v1 API
-instead of the Expo Push API.
+   This regenerates `lib/firebase_options.dart` with real values.
+7. On the Firebase Console → Project Settings → Service Accounts, generate a
+   new private key (JSON). Place it on the backend server and point
+   `GOOGLE_APPLICATION_CREDENTIALS` (or `GCS_CREDENTIALS_PATH`) at it.
 
 ---
 
