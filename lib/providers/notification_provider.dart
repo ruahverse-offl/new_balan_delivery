@@ -208,6 +208,14 @@ class NotificationProvider extends ChangeNotifier {
     await prefs.setString(_kLastTokenKey, token);
   }
 
-  /// Call on logout to revoke push registration.
-  Future<void> onLogout() async => _revoke();
+  /// Call on logout to revoke push registration and wipe local notification prefs.
+  Future<void> onLogout() async {
+    await _revoke();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_kPushEnabledKey);
+    await prefs.remove(_kLastTokenKey);
+    _enabled = false;
+    _pushToken = null;
+    notifyListeners();
+  }
 }

@@ -28,11 +28,18 @@ void main() async {
     ),
   );
 
+  final authProvider = AuthProvider();
+  final notificationProvider = NotificationProvider();
+
+  // Wire notification lifecycle into auth events.
+  authProvider.onLogoutNotification = notificationProvider.onLogout;
+  authProvider.onLoginNotification = notificationProvider.syncWithServer;
+
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => AuthProvider()),
-        ChangeNotifierProvider(create: (_) => NotificationProvider()),
+        ChangeNotifierProvider.value(value: authProvider),
+        ChangeNotifierProvider.value(value: notificationProvider),
       ],
       child: const NewBalanDeliveryApp(),
     ),

@@ -30,7 +30,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     if (!auth.isAuthenticated) return;
     setState(() => _error = null);
     try {
-      final items = await getMyNotifications();
+      final all = await getMyNotifications();
+      final items = all.where((n) {
+        final s = n.sendStatus.toLowerCase();
+        return s != 'failed' && s != 'error';
+      }).toList();
       if (mounted) setState(() => _items = items);
     } catch (e) {
       if (mounted) {

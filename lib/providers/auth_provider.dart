@@ -13,6 +13,10 @@ class AuthProvider extends ChangeNotifier {
   List<MenuItem> _menuItems = [];
   AuthState _state = AuthState.loading;
 
+  /// Set by main.dart after both providers are created.
+  Future<void> Function()? onLogoutNotification;
+  Future<void> Function()? onLoginNotification;
+
   AuthUser? get user => _user;
   String? get token => _token;
   String? get roleCode => _roleCode;
@@ -22,7 +26,10 @@ class AuthProvider extends ChangeNotifier {
 
   AuthProvider() {
     // Auto-logout when any API call gets a 401 (expired/revoked token).
-    onUnauthorized = () => _clear();
+    onUnauthorized = () {
+      onLogoutNotification?.call();
+      _clear();
+    };
     _restore();
   }
 
@@ -79,11 +86,14 @@ class AuthProvider extends ChangeNotifier {
       roleCode: rc,
       menuItems: perm.menuItems,
     );
+    // Register this device and deregister any stale device tokens.
+    await onLoginNotification?.call();
   }
 
   Future<void> logout() async {
     final t = _token;
-    // Revoke push registration before clearing token (see NotificationProvider).
+    // Revoke push registration and clear local notification settings before clearing token.
+    await onLogoutNotification?.call();
     await authSvc.logoutApi(t);
     await setStoredAuth(null);
     _clear();
